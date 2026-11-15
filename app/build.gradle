@@ -1,0 +1,59 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.feiyu.tape'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.feiyu.tape'
+        minSdk 19
+        targetSdk 28
+        versionCode 9
+        versionName '1.8'
+    }
+
+    // 这台平板是 32 位 Tegra，但工程里一个 .so 都没有（纯 Java 自绘），
+    // 所以不配 ndk、不配 abiFilters —— 打出来的包任何 ABI 都能装。
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        // 用工程根上的 tape.jks（和 build.sh 手工出包时是同一把钥匙，
+        // 这样 Android Studio 打的包和你之前装的包签名一致，可以直接覆盖安装）
+        release {
+            storeFile file('../tape.jks')
+            storePassword 'android'
+            keyAlias 'tape'
+            keyPassword 'android'
+        }
+    }
+
+    buildTypes {
+        debug {
+            // 调试包也签同一个 key，省得两台机器上签名换来换去
+            signingConfig signingConfigs.release
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    packagingOptions {
+        // 没有 native 库，不需要任何裁剪
+        jniLibs { useLegacyPackaging false }
+    }
+}
+
+dependencies {
+    // 故意留空：这个应用没有第三方依赖，全部是 JDK + Android Framework。
+}

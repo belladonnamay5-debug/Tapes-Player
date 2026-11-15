@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="26"
+    android:versionName="2.9.6">
+
+    <!-- 老平板：Android 4.4 起都能装；不放 .so，所以天然是全 ABI 通用（含 armeabi-v7a） -->
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="28" />
+
+    <!-- 后台走带：前台服务 + 那条安静的通知 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- 加号键的歌曲扫描：Android 12 及以前读外部存储；13 起改读音频媒体库 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+    <application
+        android:name=".TapeApp"
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher"
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 第二个入口：绕开自绘台面，直接进极简界面 -->
+        <activity
+            android:name=".MiniActivity"
+            android:exported="true"
+            android:label="磁带机 · 极简"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 加号键：自定义歌曲扫描界面（不是系统文件选择器） -->
+        <activity
+            android:name=".SongScannerActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <service
+            android:name=".PlaybackService"
+            android:exported="false" />
+    </application>
+</manifest>

@@ -1,0 +1,25 @@
+// 磁带机 —— Gradle 设置
+// 所有仓库都先走阿里云镜像（国内速度好），镜像没有再回落到官方仓库。
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'TapeDeck'
+include ':app'
